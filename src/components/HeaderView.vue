@@ -7,7 +7,9 @@
       <img class="logoHeader" src="../assets/icon-left-font-monochrome-black-rogne.png" alt="">
     </router-link>
     <div class="HeaderUserLink">
-      <router-link to="/profil" class="profileLink">
+      <router-link class="profileLink"
+      :to="{ name: 'profil', params: { UserId: this.$store.state.user.id } }">
+      <!-- <router-link to="/profil" > -->
         <img class="avatar" :src="avatar" alt="avatar de l'utilisateur">
         <p> {{ username }} </p>
       </router-link>
