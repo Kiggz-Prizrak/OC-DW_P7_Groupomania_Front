@@ -1,55 +1,71 @@
 <template>
-  <form @submit.prevent="sendPost" >
+  <form @submit.prevent="sendPost">
     <div class="blockLabel">
       <label class="labelForm" for="textarea">
-        <input v-model="postContent" type="textarea" id="postContent" />
-        <label for="media">
-          <input class="media" type="file" id="media" name="media" accept="image/png, image/jpeg" />
-          <span id="iconMedia"><i class="fas fa-images"></i></span>
-        </label>
+        <input v-model="postContent"
+        :placeholder="this.post.content" type="textarea" id="postContent" />
+      </label>
+      <input
+        v-on:click="deleteMedia = !deleteMedia"
+        class="mediaSuppressor"
+        type="submit"
+        value="Retirer le média du post"
+      />
+      <label v-if="deleteMedia" class="labelMedia" for="media">
+        <span id="iconMedia"><i class="fas fa-images"></i></span>
+        <input class="media" type="file" id="media" name="media" accept="image/png, image/jpeg" />
       </label>
     </div>
 
-    <input id="submitPost"  type="submit" value="PUBLIER" />
+    <input id="submitPost" type="submit" value="MODIFIER" />
   </form>
 </template>
 
 <script>
 export default {
-  name: 'addPost',
+  name: 'PostModifier',
   components: {},
+  props: {
+    post: Object,
+  },
+  data() {
+    return {
+      deleteMedia: true,
+      // postId: this.Post.id,
+    };
+  },
   methods: {
     sendPost() {
-      if (document.getElementById('media').files[0]) {
+      if (this.deleteMedia === true) {
         const newPost = new FormData();
         newPost.append('content', this.postContent);
         newPost.append('media', document.getElementById('media').files[0]);
 
-        console.log(newPost);
+        console.log(document.getElementById('media').value);
 
-        fetch('http://localhost:3000/api/posts', {
+        fetch(`http://localhost:3000/api/posts/${this.post.id}`, {
           body: newPost,
-          method: 'POST',
+          method: 'PUT',
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
         })
           .then((res) => res.json())
-          .then(() => this.$emit('postCreated'));
+          .then(() => this.$emit('getAllPosts'));
       } else {
         const newPost = JSON.stringify({
           content: this.postContent,
         });
-        fetch('http://localhost:3000/api/posts', {
+        fetch(`http://localhost:3000/api/posts/${this.post.id}`, {
           body: newPost,
-          method: 'POST',
+          method: 'PUT',
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
             'Content-Type': 'application/json',
           },
         })
           .then((res) => res.json())
-          .then(() => this.$emit('postCreated'));
+          .then(() => this.$emit('getAllPosts'));
       }
     },
   },
@@ -57,9 +73,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#media {
-  display: none;
-}
 #iconMedia {
   margin: 0px;
 }
@@ -69,11 +82,8 @@ form {
   justify-content: space-around;
   flex-direction: row;
   align-items: center;
-  background-color: #d7d7d7d8;
   border-radius: 10px;
-  padding: 20px;
   margin: 20px 0px;
-  border: solid 1px black;
 }
 .blockLabel {
   width: 75%;
@@ -92,7 +102,7 @@ form {
 #postContent {
   background-color: transparent;
   border: none;
-  width: 90%;
+  width: 100%;
   &:focus-visible {
     border: none;
   }
@@ -106,5 +116,35 @@ form {
   color: #3f3f3f;
   font-weight: bold;
   font-size: 16px;
+}
+
+.mediaSuppressor {
+  display: flex;
+  flex-direction: flex-start;
+  margin-bottom: 10px;
+}
+
+.labelMedia {
+  background-color: #ffffff;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: solid 2px #3f3f3f;
+}
+
+.mediaSuppressor {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 5px 0px;
+  &:active {
+    background-color: #d1515a;
+  }
 }
 </style>

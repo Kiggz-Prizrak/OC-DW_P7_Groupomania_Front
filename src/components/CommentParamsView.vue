@@ -1,24 +1,23 @@
 <template>
   <div class="params">
     <input
-      v-if="this.$store.state.user.id === this.postUserId
+      v-if="this.$store.state.user.id === this.commentUserId
       || this.$store.state.user.isAdmin === true"
       id="deletePost"
       class="postOptions"
       type="submit"
       value="Suprimer"
-      @click="deletePost"
+      @click="deleteComment"
     />
     <input
-      v-if="this.$store.state.user.id === this.postUserId"
+      v-if="this.$store.state.user.id === this.commenttUserId"
       id="changePost"
       class="postOptions"
       type="submit"
       value="Modifier"
-      :post="post"
-      @getAllPosts="$emit('getAllPosts')"
     />
-    <input v-if="this.$store.state.user.id !== this.postUserId"
+    <input
+    v-if="this.$store.state.user.id !== this.commenttUserId"
     id="changePost" class="postOptions" type="submit" value="Report" />
     <span id="iconPostParams"><i class="fas fa-ellipsis-v"></i></span>
   </div>
@@ -26,15 +25,14 @@
 
 <script>
 export default {
-  name: 'ParamsView',
+  name: 'CommentParamsView',
   props: {
-    postUserId: Number,
-    postId: Number,
-    post: Object,
+    commentUserId: Number,
+    commentId: Number,
   },
   methods: {
-    deletePost() {
-      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+    deleteComment() {
+      fetch(`http://localhost:3000/api/comments/${this.commentId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${this.$store.state.token}` },
       })
@@ -76,15 +74,6 @@ export default {
     font-weight: bold;
   }
   &:hover {
-    background-color: #091f43;
-    #iconPostParams {
-      color: #d7d7d7d8;
-    }
-    .postOptions {
-      display: block;
-    }
-  }
-  &:focus {
     background-color: #091f43;
     #iconPostParams {
       color: #d7d7d7d8;

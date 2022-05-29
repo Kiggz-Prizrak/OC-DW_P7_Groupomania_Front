@@ -11,6 +11,7 @@
     v-for="comment in Comments"
     :key="comment.id"
     :comment="comment"
+    @getAllPosts="$emit('getAllPosts')"
     />
     <!-- Fin de comment -->
   </div>
@@ -28,6 +29,7 @@ export default {
   },
   props: {
     Comments: Array,
+    postId: Number,
   },
 };
 </script>

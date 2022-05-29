@@ -7,24 +7,66 @@
           <router-link :to="{ name: 'profil', params: { UserId: post.UserId } }">
             <h3 id="userName">{{ post.User.username }}</h3>
           </router-link>
-          <h3 id="userName">{{ post.User.username }}</h3>
           <p id="postCreationDate">le [Date de publication] à [Heure de création]</p>
         </div>
       </div>
       <div>
-        <ParamsView />
+        <ParamsView
+          :postUserId="post.UserId"
+          :postId="post.id"
+          @getAllPosts="$emit('getAllPosts')"
+          :post="post"
+        />
       </div>
     </div>
+    <!-- contenu du post -->
+
     <p id="postContent">{{ post.content }}</p>
-    <img class="media" v-if="media" :src="post.media" alt="avatar de l'utilisateur" />
+    <img class="media" v-if="post.media" :src="this.post.media" alt="avatar de l'utilisateur" />
+
+    <!-- fin - contenu du post -->
+
+    <!-- Modificateur du post -->
+
+    <PostModifier
+    :post="post"
+    />
+
+    <!--fin - Modificateur du post -->
+
+    <!-- Reactions liste -->
+
+    <div class="blockReactions">
+      <span class="reactionType">
+        <i class="fas fa-thumbs-down"></i>
+        <p>69</p>
+      </span>
+      <span class="reactionType">
+        <i class="fas fa-thumbs-up"></i>
+        <p>30</p>
+      </span>
+      <span class="reactionType">
+        <i class="fas fa-heart"></i>
+        <p>25</p>
+      </span>
+    </div>
+
+    <!-- fin - Reactions liste  -->
+
     <hr />
+
     <div class="postFooter">
       <input v-on:click="isHidden = !isHidden" class="comment" type="submit" value="Commenter" />
       <Reactions />
     </div>
+
     <div v-if="!isHidden" class="commentContainer">
-      <AddComment />
-      <CommentsList :Comments="post.Comments" />
+      <AddComment :postId="post.id" @getAllPosts="$emit('getAllPosts')" />
+      <CommentsList
+        :Comments="post.Comments"
+        :postId="post.id"
+        @getAllPosts="$emit('getAllPosts')"
+      />
     </div>
   </div>
 </template>
@@ -34,6 +76,7 @@ import AddComment from './AddCommentView.vue';
 import CommentsList from './CommentsListView.vue';
 import ParamsView from './ParamsView.vue';
 import Reactions from './ReactionsView.vue';
+import PostModifier from './PostModifierView.vue';
 
 export default {
   name: 'PostView',
@@ -42,6 +85,7 @@ export default {
     CommentsList,
     AddComment,
     Reactions,
+    PostModifier,
   },
   props: {
     post: Object,
@@ -63,9 +107,9 @@ export default {
   background-color: #d7d7d7d8;
   border-radius: 10px;
   padding: 20px;
-  margin: 20px;
+  margin: 20px 0px;
   border: solid 1px black;
-  max-width: 560px;
+  width: 100%;
   .postHeader {
     display: flex;
     justify-content: space-between;
@@ -92,6 +136,7 @@ export default {
         margin: 5px;
         color: #d1515a;
         font-weight: bold;
+        text-decoration: none;
       }
       p {
         margin: 5px;
@@ -107,6 +152,7 @@ export default {
   }
   img {
     width: 100%;
+    object-fit: contain;
   }
   .postFooter {
     display: flex;
@@ -131,6 +177,21 @@ export default {
         color: #d7d7d7d8;
       }
     }
+  }
+}
+
+.blockReactions {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  .reactionType {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px;
+  }
+  p {
+    margin-left: 3px;
   }
 }
 </style>

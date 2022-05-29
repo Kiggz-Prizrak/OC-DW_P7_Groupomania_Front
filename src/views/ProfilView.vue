@@ -2,19 +2,19 @@
   <div class="container">
     <Header />
     <div class="profilContainer">
-      <UserInfoCard posts="posts"/>
+      <UserInfoCard :userData="this.userData" />
       <div class="postsSection">
-        <addPost v-if="this.$store.state.user.id === UserId"
+        <addPost
+        v-if="this.$store.state.user.id === UserId"
+        @postCreated="getUserInfos"
         />
-        <PostsList
-        :posts="this.userData.Posts"
-        />
-         <!-- :userId="this.$store.state.user.userId" -->
+        <PostsList :posts="this.userData.Posts" />
+        <!-- :userId="this.$store.state.user.userId" -->
       </div>
     </div>
     <Footer />
   </div>
-  <p> {{ this.userData.Posts }}</p>
+  <p>{{ this.userData.Posts }}</p>
 </template>
 
 <script>
@@ -44,15 +44,20 @@ export default {
       userData: [],
     };
   },
-  mounted() {
-    fetch(`http://localhost:3000/api/users/${this.UserId}`, {
-      headers: { Authorization: `Bearer ${this.$store.state.token}` },
-    })
-      .then((res) => res.json())
-      .then((User) => {
-        this.userData = User;
-        console.log(User);
-      });
+  methods: {
+    getUserInfos() {
+      fetch(`http://localhost:3000/api/users/${this.UserId}`, {
+        headers: { Authorization: `Bearer ${this.$store.state.token}` },
+      })
+        .then((res) => res.json())
+        .then((User) => {
+          this.userData = User;
+          console.log(User);
+        });
+    },
+  },
+  created() {
+    this.getUserInfos();
   },
 };
 </script>
@@ -73,5 +78,6 @@ export default {
   margin: 3%;
   display: flex;
   flex-direction: row;
+  max-width: 900px;
 }
 </style>

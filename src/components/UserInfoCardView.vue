@@ -1,15 +1,19 @@
 <template>
  <div>
   <div class="userInfo">
-    <img class="avatar" :src="avatar" alt="avatar de l'utilisateur">
+    <img class="avatar" :src="userData.avatar" alt="avatar de l'utilisateur">
     <hr>
-    <p>{{ `${this.$store.state.user.firstName} ${this.$store.state.user.lastName}` }}</p>
-    <p> {{ this.$store.state.user.username }} </p>
+    <p>{{ `${this.userData.firstName} ${userData.lastName}` }}</p>
+    <p> {{ this.userData.username }} </p>
     <hr>
     <div class="profilData">
       <p>Inscripion : <span id="inscriptionDate">[12/12/2012]</span></p>
-      <p>Posts : <span id="postsNumber">{{ posts.length }}</span></p>
-      <p>Commentaires : <span id="comsNumber">[152]</span></p>
+      <p>Posts : <span id="postsNumber">{{ userData.Posts.length }}</span></p>
+      <p>Commentaires : <span id="comsNumber">{{ userData.Comments.length }}</span></p>
+    </div>
+    <div v-if="this.$store.state.user.id === this.userData.id">
+      <hr>
+      <input @click="deleteAccount" class="delete" type="submit" value="Suprimer le compte">
     </div>
   </div>
 </div>
@@ -18,14 +22,19 @@
 <script>
 export default {
   name: 'UserInfoCardView',
-  computed: {
-    avatar() {
-      console.log(this.$store.state.user.avatar);
-      return this.$store.state.user.avatar;
-    },
-  },
   props: {
-    posts: Object,
+    userData: Object,
+  },
+  methods: {
+    deleteAccount() {
+      fetch(`http://localhost:3000/api/users/${this.userData.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${this.$store.state.token}` },
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res));
+      document.location.href = 'http://localhost:8080/login';
+    },
   },
 };
 </script>
@@ -38,8 +47,17 @@ export default {
   margin: 20px;
   border: solid 1px black;
   img {
-    width: 300px;
+    width: 250px;
+    border-radius: 100%;
+    object-fit: contain;
+    height: 250px;
+  }
+  .delete {
+    background-color: #091f43;
+    color: rgba(215, 215, 215);
     border-radius: 10px;
+    margin-top: 10px;
+    padding: 7px
   }
 }
 </style>
