@@ -6,6 +6,7 @@
 <style lang="scss">
 * {
   box-sizing: border-box;
+  text-decoration: nonegit ;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

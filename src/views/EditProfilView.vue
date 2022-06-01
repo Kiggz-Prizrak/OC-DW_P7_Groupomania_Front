@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header />
-    <form @submit.prevent="submitLogin">
+    <form @submit.prevent="edit">
       <h1>Modifier le profil</h1>
       <div class="fieldsContainer">
         <label for="firstName">
@@ -54,7 +54,7 @@
           <input v-model="passwordConfirmation" id="password" type="password" name="password" />
         </label>
       </div>
-      <input @click="edit" class="submitBtn" type="submit" value="MODIFIER" />
+      <input class="submitBtn" type="submit" value="MODIFIER" />
       <hr />
       <p>*Champs Obligatoire {{ this.linkMedia }}</p>
     </form>
@@ -81,25 +81,73 @@ export default {
   },
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      username: '',
+      firstName: this.$store.state.user.firstName,
+      lastName: this.$store.state.user.lastName,
+      username: this.$store.state.user.username,
       password: '',
-      email: '',
+      passwordConfirmation: '',
+      email: this.$store.state.user.email,
+      emailConfirmation: this.$store.state.user.email,
     };
   },
   methods: {
-    edit() {
-      console.log(this.$refs.inputFile.files[0]);
+    upadateProfilKeepAvatar() {
       if (this.email === this.emailConfirmation && this.password === this.passwordConfirmation) {
+        const { user } = this.$store.state;
+        const userEdited = JSON.stringify({
+          firstName: this.firstName !== user.firstName ? this.firstName : undefined,
+          lastName: this.lastName !== user.lastName ? this.lastName : undefined,
+          username: this.username !== user.username ? this.username : undefined,
+          password: this.password || undefined,
+          email: this.email !== user.email ? this.email : undefined,
+        });
+
+        fetch(`http://localhost:3000/api/users/${this.UserId}`, {
+          body: userEdited,
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            this.$store.dispatch('setUser', res.user);
+            this.$router.push({ name: 'profil' });
+          });
+      }
+    },
+    updatePostWithAvatar() {
+      if (this.email === this.emailConfirmation && this.password === this.passwordConfirmation) {
+        const { user } = this.$store.state;
         const userEdited = new FormData();
+
         userEdited.append('avatar', this.$refs.inputFile.files[0] ?? this.$store.user.avatar);
-        userEdited.append('firstName', this.firstName);
-        userEdited.append('lastName', this.lastName);
-        userEdited.append('username', this.username);
-        userEdited.append('password', this.password);
-        userEdited.append('email', this.email);
-        console.log(userEdited);
+
+        if (this.firstame !== user.firstName) {
+          userEdited.append(
+            'firstName',
+            this.firstName !== user.firstName ? this.firstName : undefined,
+          );
+        }
+        if (this.lastName !== user.lastName) {
+          userEdited.append(
+            'lastName',
+            this.lastName !== user.lastName ? this.lastName : undefined,
+          );
+        }
+        if (this.username !== user.username) {
+          userEdited.append(
+            'username',
+            this.username !== user.username ? this.username : undefined,
+          );
+        }
+        if (this.password) {
+          userEdited.append('password', this.password || undefined);
+        }
+        if (this.email !== user.email) {
+          userEdited.append('email', this.email !== user.email ? this.email : undefined);
+        }
 
         fetch(`http://localhost:3000/api/users/${this.UserId}`, {
           body: userEdited,
@@ -109,9 +157,66 @@ export default {
           },
         })
           .then((res) => res.json())
-          .then(() => this.$router.push({ name: 'profil' }));
+          .then((res) => {
+            this.$store.dispatch('setUser', res.user);
+            this.$router.push({ name: 'profil' });
+          });
       }
     },
+
+    edit() {
+      if (this.$refs.inputFile.files[0]) {
+        return this.updatePostWithAvatar();
+      }
+      return this.upadateProfilKeepAvatar();
+    },
+
+    // edit() {
+    //   console.log(this.$refs.inputFile.files[0]);
+    //   if (this.$refs.inputFile.files[0]) {
+    //     if (this.email === this.emailConfirmation
+    //     && this.password === this.passwordConfirmation) {
+    //       const userEdited = new FormData();
+    //       userEdited.append('avatar', this.$refs.inputFile.files[0] ?? this.$store.user.avatar);
+    //       userEdited.append('firstName', this.firstName);
+    //       userEdited.append('lastName', this.lastName);
+    //       userEdited.append('username', this.username);
+    //       userEdited.append('password', this.password);
+    //       userEdited.append('email', this.email);
+
+    //       fetch(`http://localhost:3000/api/users/${this.UserId}`, {
+    //         body: userEdited,
+    //         method: 'PUT',
+    //         headers: {
+    //           Authorization: `Bearer ${this.$store.state.token}`,
+    //         },
+    //       })
+    //         .then((res) => res.json())
+    //         .then(() => this.$router.push({ name: 'profil' }));
+    //     }
+    //   }
+    //   if (this.email === this.emailConfirmation && this.password === this.passwordConfirmation) {
+    //     const userEdited = JSON.stringify({
+    //       avatar: this.$store.user.avatar,
+    //       firstName: this.firstName,
+    //       lastName: this.lastName,
+    //       username: this.username,
+    //       password: this.password,
+    //       email: this.email,
+    //     });
+
+    //     fetch(`http://localhost:3000/api/users/${this.UserId}`, {
+    //       body: userEdited,
+    //       method: 'PUT',
+    //       headers: {
+    //         Authorization: `Bearer ${this.$store.state.token}`,
+    //         'Content-Type': 'application/json',
+    //       },
+    //     })
+    //       .then((res) => res.json())
+    //       .then(() => this.$router.push({ name: 'profil' }));
+    //   }
+    // },
   },
 };
 </script>
