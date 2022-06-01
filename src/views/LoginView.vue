@@ -13,7 +13,9 @@
       </label>
       <input class="submitBtn" type="submit" value="SE CONNECTER" />
       <hr />
-      <p>Créer un <span class="linkCreateUser" href="./views/SignupView">compte</span></p>
+        <router-link to="/signup">
+           <p class="linkCreateUser">Créer un compte</p>
+        </router-link>
     </form>
     <Footer />
   </div>

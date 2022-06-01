@@ -83,7 +83,7 @@ export default {
   #commentContent {
     background-color: transparent;
     border: none;
-    width: 90%;
+    width: 85%;
     height: 40px;
   }
   #media {

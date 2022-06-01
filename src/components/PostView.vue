@@ -15,21 +15,25 @@
           :postUserId="post.UserId"
           :postId="post.id"
           @getAllPosts="$emit('getAllPosts')"
+          @toggleEditPost="toggleEditPost"
           :post="post"
         />
       </div>
     </div>
     <!-- contenu du post -->
-
-    <p id="postContent">{{ post.content }}</p>
-    <img class="media" v-if="post.media" :src="this.post.media" alt="avatar de l'utilisateur" />
-
+    <div class="postContent" v-if="this.editPost === false">
+      <p id="postContent">{{ post.content }}</p>
+      <img class="media" v-if="post.media" :src="this.post.media" alt="avatar de l'utilisateur" />
+    </div>
     <!-- fin - contenu du post -->
 
     <!-- Modificateur du post -->
 
     <PostModifier
     :post="post"
+    v-if="this.editPost === true"
+    @toggleEditPost="toggleEditPost"
+    @getAllPosts="$emit('getAllPosts')"
     />
 
     <!--fin - Modificateur du post -->
@@ -66,6 +70,7 @@
         :Comments="post.Comments"
         :postId="post.id"
         @getAllPosts="$emit('getAllPosts')"
+        @toggleEditPost="toggleEditPost"
       />
     </div>
   </div>
@@ -90,9 +95,15 @@ export default {
   props: {
     post: Object,
   },
+  methods: {
+    toggleEditPost() {
+      this.editPost = !this.editPost;
+    },
+  },
   data() {
     return {
       isHidden: true,
+      editPost: false,
     };
   },
 };
@@ -104,6 +115,7 @@ export default {
   border-radius: 100px;
 }
 .post {
+  position: relative;
   background-color: #d7d7d7d8;
   border-radius: 10px;
   padding: 20px;
@@ -159,6 +171,7 @@ export default {
     justify-content: space-around;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap-reverse;
     .comment {
       background-color: transparent;
       font-weight: bold;

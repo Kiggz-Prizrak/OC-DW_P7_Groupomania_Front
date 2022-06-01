@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="sendPost" >
+  <form @submit.prevent="sendPost">
     <div class="blockLabel">
       <label class="labelForm" for="textarea">
         <input v-model="postContent" type="textarea" id="postContent" />
@@ -10,13 +10,18 @@
       </label>
     </div>
 
-    <input id="submitPost"  type="submit" value="PUBLIER" />
+    <input id="submitPost" type="submit" value="PUBLIER" />
   </form>
 </template>
 
 <script>
 export default {
   name: 'addPost',
+  data() {
+    return {
+      postContent: '',
+    };
+  },
   components: {},
   methods: {
     sendPost() {
@@ -101,7 +106,6 @@ form {
   border-radius: 10px;
   border: solid 2px #3f3f3f;
   height: 40px;
-  width: 20%;
   background-color: #d1515a;
   color: #3f3f3f;
   font-weight: bold;

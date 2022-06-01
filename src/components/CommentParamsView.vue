@@ -1,25 +1,32 @@
 <template>
   <div class="params">
     <input
-      v-if="this.$store.state.user.id === this.commentUserId
-      || this.$store.state.user.isAdmin === true"
-      id="deletePost"
-      class="postOptions"
+      v-if="
+        this.$store.state.user.id === this.commentUserId || this.$store.state.user.isAdmin === true
+      "
+      id="deleteComment"
+      class="commentOptions"
       type="submit"
       value="Suprimer"
       @click="deleteComment"
     />
     <input
-      v-if="this.$store.state.user.id === this.commenttUserId"
-      id="changePost"
-      class="postOptions"
+      v-if="this.$store.state.user.id === this.commentUserId"
+      id="changeComment"
+      class="commentOptions"
       type="submit"
       value="Modifier"
+      :comment="comment"
+      v-on:click="this.$emit('toggleEditComment')"
     />
     <input
-    v-if="this.$store.state.user.id !== this.commenttUserId"
-    id="changePost" class="postOptions" type="submit" value="Report" />
-    <span id="iconPostParams"><i class="fas fa-ellipsis-v"></i></span>
+      v-if="this.$store.state.user.id !== this.commentUserId"
+      id="changeComment"
+      class="commentOptions"
+      type="submit"
+      value="Report"
+    />
+    <span id="iconCommentParams"><i class="fas fa-ellipsis-v"></i></span>
   </div>
 </template>
 
@@ -29,6 +36,7 @@ export default {
   props: {
     commentUserId: Number,
     commentId: Number,
+    comment: Object,
   },
   methods: {
     deleteComment() {
@@ -61,10 +69,10 @@ export default {
     color: #d7d7d7d8;
     display: none;
   }
-  .postOptions {
+  .commentOptions {
     width: 100%;
   }
-  #iconPostParams {
+  #iconCommentParams {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -75,10 +83,10 @@ export default {
   }
   &:hover {
     background-color: #091f43;
-    #iconPostParams {
+    #iconCommentParams {
       color: #d7d7d7d8;
     }
-    .postOptions {
+    .commentOptions {
       display: block;
     }
   }

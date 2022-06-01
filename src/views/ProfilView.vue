@@ -14,7 +14,6 @@
     </div>
     <Footer />
   </div>
-  <p>{{ this.userData.Posts }}</p>
 </template>
 
 <script>
@@ -79,5 +78,7 @@ export default {
   display: flex;
   flex-direction: row;
   max-width: 900px;
+  flex-wrap: wrap;
+  justify-content: center
 }
 </style>

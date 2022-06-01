@@ -1,19 +1,19 @@
 <template>
-  <form @submit.prevent="sendPost">
+  <form @submit.prevent="sendComment">
     <div class="blockLabel">
       <label class="labelForm" for="textarea">
         <input
-        v-model="postContent"
-        :placeholder="post.content"
-         type="textarea"
-         id="postContent"
-         />
+          v-model="commentContent"
+          :placeholder="comment.content"
+          type="textarea"
+          id="commentContent"
+        />
       </label>
       <input
         v-on:click="deleteMedia = !deleteMedia"
         class="mediaSuppressor"
         type="button"
-        value="Retirer le média du post"
+        value="Retirer le média du commentaire"
       />
       <label v-if="!deleteMedia" class="labelMedia" for="media">
         <span id="iconMedia"><i class="fas fa-images"></i></span>
@@ -27,24 +27,20 @@
       </label>
     </div>
 
-    <input id="submitPost" type="submit" value="MODIFIER" />
+    <input id="submitComment" type="submit" value="MODIFIER" />
   </form>
 </template>
 
 <script>
 export default {
-  name: 'PostModifier',
+  name: 'CommentModifier',
   props: {
-    post: Object,
-    UserId: {
-      type: Number,
-      required: true,
-    },
+    comment: Object,
   },
   watch: {
-    post: {
-      handler(newPostProp) {
-        this.postContent = newPostProp.content;
+    comment: {
+      handler(newCommentProp) {
+        this.commentContent = newCommentProp.content;
       },
       immediate: true,
     },
@@ -52,19 +48,19 @@ export default {
   data() {
     return {
       deleteMedia: false,
-      postContent: '',
+      commentContent: '',
     };
   },
   methods: {
-    updatePostWithMedia() {
-      const newPost = new FormData();
-      newPost.append('content', this.postContent);
-      newPost.append('media', document.getElementById('modifierMedia').files[0]);
+    updateCommentWithMedia() {
+      const newComment = new FormData();
+      newComment.append('content', this.commentContent);
+      newComment.append('media', document.getElementById('modifierMedia').files[0]);
 
       console.log(document.getElementById('modifierMedia').value);
 
-      fetch(`http://localhost:3000/api/posts/${this.post.id}`, {
-        body: newPost,
+      fetch(`http://localhost:3000/api/comments/${this.comment.id}`, {
+        body: newComment,
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${this.$store.state.token}`,
@@ -72,17 +68,17 @@ export default {
       })
         .then((res) => res.json())
         .then(() => {
-          this.$emit('toggleEditPost');
+          this.$emit('toggleEditComment');
           this.$emit('getAllPosts');
         });
     },
-    updatePostWithoutMedia() {
-      const newPost = JSON.stringify({
-        content: this.postContent,
+    updateCommentWithoutMedia() {
+      const newComment = JSON.stringify({
+        content: this.commentContent,
         media: null,
       });
-      fetch(`http://localhost:3000/api/posts/${this.UserId}`, {
-        body: newPost,
+      fetch(`http://localhost:3000/api/comments/${this.comment.id}`, {
+        body: newComment,
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${this.$store.state.token}`,
@@ -91,16 +87,16 @@ export default {
       })
         .then((res) => res.json())
         .then(() => {
-          this.$emit('toggleEditPost');
+          this.$emit('toggleEditcomment');
           this.$emit('getAllPosts');
         });
     },
-    updatePostKeepMedia() {
-      const newPost = JSON.stringify({
-        content: this.postContent,
+    updateCommentKeepMedia() {
+      const newComment = JSON.stringify({
+        content: this.commentContent,
       });
-      fetch(`http://localhost:3000/api/posts/${this.post.id}`, {
-        body: newPost,
+      fetch(`http://localhost:3000/api/comments/${this.comment.id}`, {
+        body: newComment,
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${this.$store.state.token}`,
@@ -109,18 +105,18 @@ export default {
       })
         .then((res) => res.json())
         .then(() => {
-          this.$emit('toggleEditPost');
+          this.$emit('toggleEditComment');
           this.$emit('getAllPosts');
         });
     },
-    sendPost() {
+    sendComment() {
       if (this.deleteMedia === true) {
-        return this.updatePostWithoutMedia();
+        return this.updateCommentWithoutMedia();
       }
       if (document.getElementById('modifierMedia').files[0]) {
-        return this.updatePostWithMedia();
+        return this.updateCommentWithMedia();
       }
-      return this.updatePostKeepMedia();
+      return this.updateCommentKeepMedia();
     },
   },
 };
@@ -153,7 +149,7 @@ form {
   border-radius: 10px;
   border: solid 2px #3f3f3f;
 }
-#postContent {
+#commentContent {
   background-color: transparent;
   border: none;
   width: 100%;
@@ -161,7 +157,7 @@ form {
     border: none;
   }
 }
-#submitPost {
+#submitComment {
   border-radius: 10px;
   border: solid 2px #3f3f3f;
   height: 40px;

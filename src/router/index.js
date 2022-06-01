@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
 import ProfilView from '../views/ProfilView.vue';
 import AccueilView from '../views/AccueilView.vue';
+import EditProfilView from '../views/EditProfilView.vue';
 import store from '../store';
 
 const routes = [
@@ -37,7 +38,21 @@ const routes = [
     component: ProfilView,
     props(route) {
       const UserId = Number.parseInt(route.params.UserId, 10);
-      console.log(UserId);
+      if (Number.isNaN(UserId)) {
+        return 0;
+      }
+      return { UserId };
+    },
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/editprofil/:UserId',
+    name: 'editprofil',
+    component: EditProfilView,
+    props(route) {
+      const UserId = Number.parseInt(route.params.UserId, 10);
       if (Number.isNaN(UserId)) {
         return 0;
       }

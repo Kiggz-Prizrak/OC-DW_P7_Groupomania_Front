@@ -1,8 +1,9 @@
 <template>
   <div class="params">
     <input
-      v-if="this.$store.state.user.id === this.postUserId
-      || this.$store.state.user.isAdmin === true"
+      v-if="
+        this.$store.state.user.id === this.postUserId || this.$store.state.user.isAdmin === true
+      "
       id="deletePost"
       class="postOptions"
       type="submit"
@@ -10,16 +11,23 @@
       @click="deletePost"
     />
     <input
-      v-if="this.$store.state.user.id === this.postUserId"
+      v-if="this.$store.state.user.id === this.postUserId
+      || this.$store.state.user.isAdmin === true"
       id="changePost"
       class="postOptions"
       type="submit"
       value="Modifier"
       :post="post"
-      @getAllPosts="$emit('getAllPosts')"
+      v-on:click="this.$emit('toggleEditPost')"
     />
-    <input v-if="this.$store.state.user.id !== this.postUserId"
-    id="changePost" class="postOptions" type="submit" value="Report" />
+    <input
+      v-if="this.$store.state.user.id !== this.postUserId
+      || this.$store.state.user.isAdmin === true"
+      id="changePost"
+      class="postOptions"
+      type="submit"
+      value="Report"
+    />
     <span id="iconPostParams"><i class="fas fa-ellipsis-v"></i></span>
   </div>
 </template>
@@ -27,6 +35,11 @@
 <script>
 export default {
   name: 'ParamsView',
+  data() {
+    return {
+      inputModifier: false,
+    };
+  },
   props: {
     postUserId: Number,
     postId: Number,
@@ -47,6 +60,9 @@ export default {
 
 <style scoped lang="scss">
 .params {
+  position:absolute;
+  right: 0%;
+  margin-right: 10px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;

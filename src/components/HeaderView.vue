@@ -28,11 +28,9 @@ export default {
   },
   computed: {
     username() {
-      console.log(this.$store.state);
       return this.$store.state.user.username || `${this.$store.state.user.firstName} ${this.$store.state.user.lastName}`;
     },
     avatar() {
-      console.log(this.$store.state.user.avatar);
       return this.$store.state.user.avatar;
     },
   },
@@ -47,9 +45,11 @@ export default {
   height: 35px;
 }
 nav {
+  z-index: 90;
   position: fixed;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background-color: #D7D7D7 ;
@@ -68,7 +68,6 @@ nav {
   .avatar {
     height: 40px;
     border-radius: 100px;
-    margin-left: 10px;
     margin-right: 10px;
   }
 

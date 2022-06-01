@@ -6,18 +6,27 @@
 
         <h3>{{ comment.User.username }}</h3>
       </div>
-      <commentParams
+      <CommentParams
         :commentUserId="comment.UserId"
         :commentId="comment.id"
         @getAllPosts="$emit('getAllPosts')"
+        @toggleEditComment="toggleEditComment"
+        :comment="comment"
       />
     </div>
     <div class="commentBlock">
-      <p id="commentContent">{{ comment.content }}</p>
-      <div v-if="comment.media">
-        <hr />
-        <img :src="comment.media" alt="" />
+      <div class="commentContent" v-if="this.editComment === false">
+        <p id="commentContent">{{ comment.content }}</p>
+        <div v-if="comment.media">
+          <img :src="comment.media" alt="" />
+        </div>
       </div>
+      <CommentModifier
+        :comment="comment"
+        v-if="this.editComment === true"
+        @toggleEditComment="toggleEditComment"
+        @getAllPosts="$emit('getAllPosts')"
+      />
       <div class="blockReactions">
         <span class="reactionType">
           <i class="fas fa-thumbs-down"></i>
@@ -43,16 +52,29 @@
 
 <script>
 import Reactions from '@/components/ReactionsView.vue';
-import commentParams from '@/components/CommentParamsView.vue';
+import CommentParams from '@/components/CommentParamsView.vue';
+import CommentModifier from '@/components/CommentModifierView.vue';
 
 export default {
   name: 'CommentView',
   components: {
     Reactions,
-    commentParams,
+    CommentParams,
+    CommentModifier,
   },
   props: {
     comment: Object,
+  },
+  methods: {
+    toggleEditComment() {
+      this.editComment = !this.editComment;
+      console.log(this.editComment);
+    },
+  },
+  data() {
+    return {
+      editComment: false,
+    };
   },
 };
 </script>
@@ -105,6 +127,7 @@ p {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 .blockReactions {
   display: flex;
