@@ -59,7 +59,6 @@ nav {
   a {
     font-weight: bold;
     color: #2c3e50;
-
     &.router-link-exact-active {
       color: #D1515A;
     }
@@ -81,6 +80,7 @@ nav {
     justify-content: space-around;
     align-content: center;
     flex-direction: row;
+    flex-wrap: wrap;
   }
   .iconMenuActivator {
     display: flex;

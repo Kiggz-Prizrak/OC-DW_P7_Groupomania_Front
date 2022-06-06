@@ -45,7 +45,6 @@ export default {
         .then((res) => res.json())
         .then((postslist) => {
           this.posts = postslist;
-          console.log(postslist);
         });
     },
   },
@@ -76,7 +75,7 @@ export default {
 
 }
 .postsSection {
-  max-width: 540px
+  max-width:700px;
 }
 
 </style>

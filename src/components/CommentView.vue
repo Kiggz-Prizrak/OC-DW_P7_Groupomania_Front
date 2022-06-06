@@ -27,24 +27,14 @@
         @toggleEditComment="toggleEditComment"
         @getAllPosts="$emit('getAllPosts')"
       />
-      <div class="blockReactions">
-        <span class="reactionType">
-          <i class="fas fa-thumbs-down"></i>
-          <p>69</p>
-        </span>
-        <span class="reactionType">
-          <i class="fas fa-thumbs-up"></i>
-          <p>30</p>
-        </span>
-        <span class="reactionType">
-          <i class="fas fa-heart"></i>
-          <p>25</p>
-        </span>
-      </div>
       <hr />
       <div class="commentFooter">
-        <p id="creationDate">[le [18/06/2020] à [6h]]</p>
-        <Reactions />
+        <p id="creationDate">{{ dateCreation() }}</p>
+        <Reactions
+          :reactions="comment.Reactions"
+          :id="comment.id"
+          :elementReacted="elementReacted"
+        />
       </div>
     </div>
   </div>
@@ -68,12 +58,23 @@ export default {
   methods: {
     toggleEditComment() {
       this.editComment = !this.editComment;
-      console.log(this.editComment);
+    },
+
+    dateCreation() {
+      const stamp = this.comment.createdAt;
+      const date = new Date(stamp);
+      const years = date.getFullYear();
+      const months = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      return `Le ${day}/${months}/${years} à ${hours}h${minutes}`;
     },
   },
   data() {
     return {
       editComment: false,
+      elementReacted: 'comments',
     };
   },
 };
@@ -129,7 +130,7 @@ p {
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.blockReactions {
+/* .blockReactions {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -143,5 +144,5 @@ p {
   p {
     margin-left: 3px;
   }
-}
+} */
 </style>

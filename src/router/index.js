@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 // import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
+import DashboardAdminView from '../views/DashboardAdminView.vue';
 import SignupView from '../views/SignupView.vue';
 import ProfilView from '../views/ProfilView.vue';
 import AccueilView from '../views/AccueilView.vue';
@@ -8,14 +9,6 @@ import EditProfilView from '../views/EditProfilView.vue';
 import store from '../store';
 
 const routes = [
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
-  },
   {
     path: '/login',
     name: 'login',
@@ -30,6 +23,16 @@ const routes = [
     component: SignupView,
     meta: {
       auth: false,
+    },
+  },
+
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardAdminView,
+    meta: {
+      auth: true,
+      isAdmin: true,
     },
   },
   {
@@ -78,6 +81,11 @@ const router = createRouter({
 });
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !store.state.token) {
+    return next({
+      name: 'login',
+    });
+  }
+  if (to.meta.isAdmin && !store.state.user.isAdmin) {
     return next({
       name: 'login',
     });

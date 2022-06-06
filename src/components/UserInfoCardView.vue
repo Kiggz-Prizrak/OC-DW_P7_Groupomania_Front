@@ -7,7 +7,7 @@
       <p>{{ this.userData.username }}</p>
       <hr />
       <div class="profilData">
-        <p>Inscripion : <span id="inscriptionDate">[12/12/2012]</span></p>
+        <p>Inscripion : <span id="inscriptionDate">{{ dateCreation() }}</span></p>
         <p>
           Posts : <span id="postsNumber">{{ userData.Posts.length }}</span>
         </p>
@@ -48,6 +48,14 @@ export default {
     userData: Object,
   },
   methods: {
+    dateCreation() {
+      const stamp = this.userData.createdAt;
+      const date = new Date(stamp);
+      const years = date.getFullYear();
+      const months = date.getMonth() + 1;
+      const day = date.getDate();
+      return `Le ${day}/${months}/${years}`;
+    },
     deleteAccount() {
       fetch(`http://localhost:3000/api/users/${this.userData.id}`, {
         method: 'DELETE',
@@ -83,7 +91,7 @@ export default {
 
 .inputSection {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }

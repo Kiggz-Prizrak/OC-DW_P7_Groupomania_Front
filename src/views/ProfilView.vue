@@ -8,7 +8,9 @@
         v-if="this.$store.state.user.id === UserId"
         @postCreated="getUserInfos"
         />
-        <PostsList :posts="this.userData.Posts" />
+        <PostsList
+        :posts="this.userData.Posts"
+        @getAllPosts="getUserInfos"/>
         <!-- :userId="this.$store.state.user.userId" -->
       </div>
     </div>
@@ -80,5 +82,8 @@ export default {
   max-width: 900px;
   flex-wrap: wrap;
   justify-content: center
+}
+.postsSection {
+  max-width:500px;
 }
 </style>

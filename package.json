@@ -16,6 +16,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue3-easy-data-table": "^1.0.12",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

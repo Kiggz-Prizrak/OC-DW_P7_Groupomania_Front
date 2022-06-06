@@ -4,10 +4,17 @@
       <i class="fas fa-caret-down"></i>
     </span>
     <div class="ParamsInput">
+      <input @click="logout" class="postOptions" type="submit" value="Déconnexion" />
+      <router-link to="dashboard" v-if="this.$store.state.user.isAdmin" class="postOptions">
+        <p>Dashboard</p>
+      </router-link>
+      <!--
       <input
-        @click="logout" class="postOptions" type="submit" value="Déconnexion"
-      />
-      <input class="postOptions" type="submit" value="Dashboard" />
+        v-if="this.$store.state.user.isAdmin"
+        class="postOptions"
+        type="button"
+        value="Dashboard"
+      /> -->
     </div>
   </div>
 </template>
@@ -58,6 +65,7 @@ export default {
       font-weight: bold;
       &:hover {
         color: #d1515a;
+        cursor: pointer;
       }
     }
   }
