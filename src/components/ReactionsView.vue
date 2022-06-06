@@ -18,7 +18,6 @@
     </div>
   </div>
 
-  <p>{{ isUserReacted }}</p>
 </template>
 
 <script>
@@ -54,9 +53,6 @@ export default {
     },
   },
   methods: {
-    toggleEditComment() {
-      this.reacted = !this.reacted;
-    },
     verifReactionlove() {
       if (this.isUserReacted.type === 'love') {
         return true;
@@ -75,69 +71,29 @@ export default {
       }
       return false;
     },
+    //
+    ///
+    //
     react(typeOfReaction) {
       if (!this.isUserReacted.type) {
-        this.reactBody = {
-          CommentId: null,
-          PostId: this.id,
-          type: typeOfReaction,
-        };
-        fetch('http://localhost:3000/api/reactions', {
-          body: JSON.stringify(this.reactBody),
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then(() => this.$emit('getAllPosts'));
+        this.addReaction(typeOfReaction);
       } else if (this.isUserReacted.type !== typeOfReaction) {
-        this.reactBody = {
-          CommentId: null,
-          PostId: this.id,
-          type: typeOfReaction,
-        };
-        fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
-          body: JSON.stringify(this.reactBody),
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => res.json())
-          .then(() => {
-            this.$emit('getAllPosts');
-          });
+        this.changeReaction(typeOfReaction);
       } else if (this.isUserReacted.type === typeOfReaction) {
-        fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${this.$store.state.token}` },
-        })
-          .then((res) => res.json())
-          .then(() => this.$emit('getAllPosts'));
+        this.deleteReaction();
       }
     },
     //
+    ///
     //
-    //
-    addReaction() {
-      if (this.elementReacted === 'comment') {
-        this.reactBody = {
-          PostId: null,
-          CommentId: this.id,
-          type: '',
-        };
-      } else if (this.elementReacted === 'post') {
-        this.reactBody = {
-          PostId: this.id,
-          CommentId: null,
-          type: '',
-        };
-      }
+    addReaction(typeOfReaction) {
+      this.reactBody = {
+        CommentId: null,
+        PostId: this.id,
+        type: typeOfReaction,
+      };
       fetch('http://localhost:3000/api/reactions', {
-        body: this.reactBody,
+        body: JSON.stringify(this.reactBody),
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.$store.state.token}`,
@@ -145,22 +101,17 @@ export default {
         },
       })
         .then((res) => res.json())
-        .then(() => this.$emit('postCreated'));
-    },
-    deleteReaction() {
-      fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${this.$store.state.token}` },
-      })
-        .then((res) => res.json())
         .then(() => this.$emit('getAllPosts'));
     },
-    changeReaction() {
-      const newPost = JSON.stringify({
-        content: this.postContent,
-      });
+    //
+    changeReaction(typeOfReaction) {
+      this.reactBody = {
+        CommentId: null,
+        PostId: this.id,
+        type: typeOfReaction,
+      };
       fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
-        body: newPost,
+        body: JSON.stringify(this.reactBody),
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${this.$store.state.token}`,
@@ -171,6 +122,15 @@ export default {
         .then(() => {
           this.$emit('getAllPosts');
         });
+    },
+    //
+    deleteReaction() {
+      fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${this.$store.state.token}` },
+      })
+        .then((res) => res.json())
+        .then(() => this.$emit('getAllPosts'));
     },
   },
 };
@@ -210,6 +170,11 @@ export default {
       &:active {
         i {
           color: #d1515a;
+        }
+      }
+      &:hover {
+        i {
+          font-size: 17px;
         }
       }
     }
