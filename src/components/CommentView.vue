@@ -34,6 +34,7 @@
           :reactions="comment.Reactions"
           :id="comment.id"
           :elementReacted="elementReacted"
+          @getAllPosts="$emit('getAllPosts')"
         />
       </div>
     </div>

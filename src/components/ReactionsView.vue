@@ -17,7 +17,6 @@
       </button>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -87,11 +86,19 @@ export default {
     ///
     //
     addReaction(typeOfReaction) {
-      this.reactBody = {
-        CommentId: null,
-        PostId: this.id,
-        type: typeOfReaction,
-      };
+      if (this.elementReacted === 'posts') {
+        this.reactBody = {
+          CommentId: null,
+          PostId: this.id,
+          type: typeOfReaction,
+        };
+      } else if (this.elementReacted === 'comments') {
+        this.reactBody = {
+          CommentId: this.id,
+          PostId: null,
+          type: typeOfReaction,
+        };
+      }
       fetch('http://localhost:3000/api/reactions', {
         body: JSON.stringify(this.reactBody),
         method: 'POST',
@@ -105,11 +112,19 @@ export default {
     },
     //
     changeReaction(typeOfReaction) {
-      this.reactBody = {
-        CommentId: null,
-        PostId: this.id,
-        type: typeOfReaction,
-      };
+      if (this.elementReacted === 'posts') {
+        this.reactBody = {
+          CommentId: null,
+          PostId: this.id,
+          type: typeOfReaction,
+        };
+      } else if (this.elementReacted === 'comments') {
+        this.reactBody = {
+          CommentId: this.id,
+          PostId: null,
+          type: typeOfReaction,
+        };
+      }
       fetch(`http://localhost:3000/api/reactions/${this.isUserReacted.id}`, {
         body: JSON.stringify(this.reactBody),
         method: 'PUT',

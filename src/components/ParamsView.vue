@@ -11,8 +11,9 @@
       @click="deletePost"
     />
     <input
-      v-if="this.$store.state.user.id === this.postUserId
-      || this.$store.state.user.isAdmin === true"
+      v-if="
+        this.$store.state.user.id === this.postUserId || this.$store.state.user.isAdmin === true
+      "
       id="changePost"
       class="postOptions"
       type="submit"
@@ -21,12 +22,12 @@
       v-on:click="this.$emit('toggleEditPost')"
     />
     <input
-      v-if="this.$store.state.user.id !== this.postUserId
-      || this.$store.state.user.isAdmin === true"
+      v-if="this.$store.state.user.id !== this.postUserId"
       id="changePost"
       class="postOptions"
       type="submit"
       value="Report"
+       v-on:click="reportPost()"
     />
     <span id="iconPostParams"><i class="fas fa-ellipsis-v"></i></span>
   </div>
@@ -38,6 +39,7 @@ export default {
   data() {
     return {
       inputModifier: false,
+      reportBody: {},
     };
   },
   props: {
@@ -54,13 +56,28 @@ export default {
         .then((res) => res.json())
         .then(() => this.$emit('getAllPosts'));
     },
+    reportPost() {
+      this.reportBody = {
+        PostId: this.postId,
+      };
+      fetch('http://localhost:3000/api/reports', {
+        body: JSON.stringify(this.reportBody),
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then(() => this.$emit('getAllPosts'));
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .params {
-  position:absolute;
+  position: absolute;
   right: 0%;
   margin-right: 10px;
   display: flex;
@@ -78,6 +95,9 @@ export default {
     border-right: 1px solid #d7d7d7d8;
     color: #d7d7d7d8;
     display: none;
+  }
+  &:active {
+    background-color: #3F3F3F;
   }
   .postOptions {
     width: 100%;

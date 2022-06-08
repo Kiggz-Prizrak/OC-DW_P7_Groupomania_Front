@@ -81,7 +81,7 @@ export default {
         content: this.postContent,
         media: null,
       });
-      fetch(`http://localhost:3000/api/posts/${this.UserId}`, {
+      fetch(`http://localhost:3000/api/posts/${this.post.id}`, {
         body: newPost,
         method: 'PUT',
         headers: {

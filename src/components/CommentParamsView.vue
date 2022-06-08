@@ -38,6 +38,11 @@ export default {
     commentId: Number,
     comment: Object,
   },
+  ddata() {
+    return {
+      reportBody: {},
+    };
+  },
   methods: {
     deleteComment() {
       fetch(`http://localhost:3000/api/comments/${this.commentId}`, {
@@ -47,7 +52,24 @@ export default {
         .then((res) => res.json())
         .then(() => this.$emit('getAllPosts'));
     },
+    reportComment() {
+      this.reportBody = {
+        PostId: null,
+        CommentId: this.commentId,
+      };
+      fetch('http://localhost:3000/api/reports', {
+        body: JSON.stringify(this.reportBody),
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then(() => this.$emit('getAllPosts'));
+    },
   },
+
 };
 </script>
 

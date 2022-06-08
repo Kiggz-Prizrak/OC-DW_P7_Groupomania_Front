@@ -4,10 +4,13 @@
       <i class="fas fa-caret-down"></i>
     </span>
     <div class="ParamsInput">
-      <input @click="logout" class="postOptions" type="submit" value="Déconnexion" />
-      <router-link to="dashboard" v-if="this.$store.state.user.isAdmin" class="postOptions">
-        <p>Dashboard</p>
-      </router-link>
+      <div class="inputsBlock">
+        <input @click="logout" class="postOptions" type="submit" value="Déconnexion" />
+        <router-link to="dashboard" v-if="this.$store.state.user.isAdmin" class="postOptions">
+          <p class="dashboardLink">Dashboard</p>
+        </router-link>
+      </div>
+
       <!--
       <input
         v-if="this.$store.state.user.isAdmin"
@@ -47,6 +50,9 @@ export default {
   .ParamsInput {
     display: none;
   }
+  .inputsBlock {
+    display: flex;
+  }
   span {
     transform: rotate(90deg);
   }
@@ -68,6 +74,17 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  .dashboardLink {
+    background-color: transparent;
+      border: none;
+      font-size: 14px;
+      font-weight: bold;
+      padding-left: 8px;
+      &:hover {
+        color: #d1515a;
+        cursor: pointer;
+      }
   }
 }
 </style>

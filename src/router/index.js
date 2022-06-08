@@ -6,6 +6,7 @@ import SignupView from '../views/SignupView.vue';
 import ProfilView from '../views/ProfilView.vue';
 import AccueilView from '../views/AccueilView.vue';
 import EditProfilView from '../views/EditProfilView.vue';
+import ElementView from '../views/ElementView.vue';
 import store from '../store';
 
 const routes = [
@@ -60,6 +61,36 @@ const routes = [
         return 0;
       }
       return { UserId };
+    },
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/posts/:PostId',
+    name: 'post',
+    component: ElementView,
+    props(route) {
+      const PostId = Number.parseInt(route.params.PostId, 10);
+      if (Number.isNaN(PostId)) {
+        return 0;
+      }
+      return { PostId };
+    },
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/comments/:CommentId',
+    name: 'comment',
+    component: ElementView,
+    props(route) {
+      const CommentId = Number.parseInt(route.params.CommentId, 10);
+      if (Number.isNaN(CommentId)) {
+        return 0;
+      }
+      return { CommentId };
     },
     meta: {
       auth: true,
