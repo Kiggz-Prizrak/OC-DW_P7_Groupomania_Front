@@ -1,5 +1,11 @@
 # frontend
 
+## Description du front
+LE front a été mis en place avec Vue.js, VueX et CLI 
+
+### Installation
+cloner le repo dans le même fichier comportant celui du front, puis démarrez npm install pour installer toutes les dépendances du frontend.
+
 ## Project setup
 ```
 npm install
