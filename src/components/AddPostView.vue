@@ -4,7 +4,13 @@
       <label class="labelForm" for="textarea">
         <input v-model="postContent" type="textarea" id="postContent" />
         <label for="media">
-          <input class="media" type="file" id="media" name="media" accept="image/png, image/jpeg" />
+          <input
+            class="media"
+            type="file"
+            id="media"
+            name="media"
+            accept="image/png, image/gif, image/jpeg"
+          />
           <span id="iconMedia"><i class="fas fa-images"></i></span>
         </label>
       </label>

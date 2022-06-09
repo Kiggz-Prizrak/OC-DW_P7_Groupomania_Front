@@ -1,16 +1,22 @@
 <template>
-  <hr>
+  <hr />
   <form @submit.prevent="sendComment">
     <label class="blockLabel" for="textarea">
       <input v-model="commentContent" type="textarea" id="commentContent" />
       <label for="media">
-        <input class="media" type="file" id="media" name="media" accept="image/png, image/jpeg" />
+        <input
+          class="media"
+          type="file"
+          id="media"
+          name="media"
+          accept="image/png, image/gif, image/jpeg"
+        />
         <span id="iconMedia"><i class="fas fa-images"></i></span>
       </label>
     </label>
-    <input id="submitComment" type="submit" value="COMMENTER" >
+    <input id="submitComment" type="submit" value="COMMENTER" />
   </form>
-  <hr>
+  <hr />
 </template>
 
 <script>
@@ -61,44 +67,44 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  form {
-    background-color: #ffffff;
-    width: 100%;
-    height: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    border: solid 2px #3F3F3F;
-    height: 70px;
-  }
-  .blockLabel {
-    justify-content: space-between;
-    width: 100%;
-  }
-  label {
-    width: 78%;
-  }
-  #commentContent {
-    background-color: transparent;
-    border: none;
-    width: 85%;
-    height: 40px;
-  }
-  #media {
-    margin: 5px;
-  }
-  #submitComment {
-    border-radius: 10px;
-    border: solid 2px #3F3F3F;
-    padding: 8px;
-    background-color: #D1515A;
-    color: #3F3F3F;
-    font-weight: bold;
-    font-size: 13px;
-  }
-  #media {
+form {
+  background-color: #ffffff;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: solid 2px #3f3f3f;
+  height: 70px;
+}
+.blockLabel {
+  justify-content: space-between;
+  width: 100%;
+}
+label {
+  width: 78%;
+}
+#commentContent {
+  background-color: transparent;
+  border: none;
+  width: 85%;
+  height: 40px;
+}
+#media {
+  margin: 5px;
+}
+#submitComment {
+  border-radius: 10px;
+  border: solid 2px #3f3f3f;
+  padding: 8px;
+  background-color: #d1515a;
+  color: #3f3f3f;
+  font-weight: bold;
+  font-size: 13px;
+}
+#media {
   display: none;
 }
 </style>

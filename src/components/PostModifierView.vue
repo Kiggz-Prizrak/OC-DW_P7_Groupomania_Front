@@ -22,7 +22,7 @@
           type="file"
           id="modifierMedia"
           name="media"
-          accept="image/png, image/jpeg"
+          accept="image/png, image/gif, image/jpeg"
         />
       </label>
     </div>
