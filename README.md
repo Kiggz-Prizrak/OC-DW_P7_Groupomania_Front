@@ -1,4 +1,7 @@
-# frontend
+# P7-Groupomania-Front
+
+## lien du back
+https://github.com/Kiggz-Prizrak/P7-Groupomania-API
 
 ## Description du front
 LE front a été mis en place avec Vue.js, VueX et CLI 
@@ -26,6 +29,5 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# P7-Groupomania-Front
+
+
