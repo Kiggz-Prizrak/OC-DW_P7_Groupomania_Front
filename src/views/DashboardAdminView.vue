@@ -319,7 +319,7 @@ export default {
         });
     },
     deleteReport(id) {
-      fetch(`http://localhost:3000/api/comments/${id}`, {
+      fetch(`http://localhost:3000/api/reports/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${this.$store.state.token}` },
       })

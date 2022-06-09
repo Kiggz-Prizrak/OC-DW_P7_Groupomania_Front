@@ -4,7 +4,6 @@
     <form @submit.prevent="submitLogin">
       <img class="titreLogin" alt="titre" src="../assets/icon-left-font-monochrome-red.titre.png" />
       <div class="fieldsContainer">
-
         <label for="firstName">
           *Prénom de l'utilisateur
           <input v-model="firstName" type="text" id="firstName" name="firstName" />
@@ -20,14 +19,14 @@
           <input v-model="username" type="text" id="surname" name="surname" />
         </label>
 
-        <label  for="avatar">
+        <label for="avatar">
           Avatar
           <div class="InputAvatar">
             <span id="iconMediaa"><i class="fas fa-images"></i></span>
-            <p></p>
             <input
-              class="mediaa"
+              class="media"
               type="file"
+              ref="inputFile"
               id="avatar"
               name="media"
               accept="image/png, image/jpeg"
@@ -54,9 +53,9 @@
           *Vérification du mot de passe
           <input v-model="passwordConfirmation" id="password" type="password" name="password" />
         </label>
-
       </div>
-      <input @click="signUp" class="submitBtn" type="submit" value="S'INSCRIRE" />
+      <input @click="signupControl" class="submitBtn" type="submit" value="S'INSCRIRE" />
+      <p>{{ errorMessage }}</p>
       <hr />
       <p>
         Créer un <span class="linkCreateUser" href="http://">compte</span><span> | </span>*Champs
@@ -78,7 +77,29 @@ export default {
     Footer,
     Header,
   },
+  data() {
+    return {
+      errorMessage: '',
+    };
+  },
   methods: {
+    signupControl() {
+      if (
+        /^[\wàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\d '-]+$/.test(
+          this.firstName,
+        ) && /^[\wàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\d '-]+$/.test(
+          this.lastName,
+        ) && /^[\wàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\d '-]+$/.test(
+          this.username,
+        ) && /^[\w\d.+-]+@[\w.-]+\.[a-z]{2,}$/.test(this.email)
+        && /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[_.@$!%*#?&])[A-Za-z\d_.@$!%*#?&]{8,}$/.test(
+          this.password,
+        )
+      ) {
+        this.signUp();
+      }
+      this.errorMessage = 'Veuillez saisir correctement les informations dans les champs';
+    },
     signUp() {
       const newUser = new FormData();
       if (this.email === this.emailConfirmation && this.password === this.passwordConfirmation) {
@@ -100,7 +121,10 @@ export default {
         // },
       })
         .then((res) => res.json())
-        .then(() => this.$router.push({ name: 'login' }));
+        .then((res) => {
+          this.errorMessage = res.message;
+          this.$router.push({ name: 'login' });
+        });
     },
   },
 };
@@ -202,8 +226,8 @@ hr {
     margin-left: 10px;
     font-size: 12px;
   }
-  .mediaa {
-    width: none;
+  .media {
+    display: none;
   }
 }
 </style>

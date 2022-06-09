@@ -13,9 +13,10 @@
       </label>
       <input class="submitBtn" type="submit" value="SE CONNECTER" />
       <hr />
-        <router-link to="/signup">
-           <p class="linkCreateUser">Créer un compte</p>
-        </router-link>
+      <p>{{ errorMessage }}</p>
+      <router-link to="/signup">
+        <p class="linkCreateUser">Créer un compte</p>
+      </router-link>
     </form>
     <Footer />
   </div>
@@ -36,35 +37,70 @@ export default {
     return {
       email: '',
       password: '',
+      errorMessage: '',
     };
   },
   methods: {
     submitLogin() {
-      const userlog = {
-        email: this.email,
-        password: this.password,
-      };
-      console.log(userlog);
+      if (
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[_.@$!%*#?&])[A-Za-z\d_.@$!%*#?&]{8,}$/.test(
+          this.password,
+        )
+        && /^[\w\d.+-]+@[\w.-]+\.[a-z]{2,}$/.test(this.email)
+      ) {
+        const userlog = {
+          email: this.email,
+          password: this.password,
+        };
+        console.log(userlog);
 
-      fetch('http://localhost:3000/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userlog),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-          const { token, user } = res;
-          this.$store.dispatch('setToken', token);
-          this.$store.dispatch('setUser', user);
-          if (user === undefined || token === undefined) {
-            localStorage.clear();
-          } else {
-            document.location.href = 'http://localhost:8080/';
-          }
-        });
+        fetch('http://localhost:3000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userlog),
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log(res);
+            this.errorMessage = res.error;
+            const { token, user } = res;
+            this.$store.dispatch('setToken', token);
+            this.$store.dispatch('setUser', user);
+            if (user === undefined || token === undefined) {
+              localStorage.clear();
+            } else {
+              document.location.href = 'http://localhost:8080/';
+            }
+          });
+      }
+      this.errorMessage = 'Veuillez renseigner correctement tous les champs';
+      // const userlog = {
+      //   email: this.email,
+      //   password: this.password,
+      // };
+      // console.log(userlog);
+
+      // fetch('http://localhost:3000/api/users/login', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(userlog),
+      // })
+      //   .then((res) => res.json())
+      //   .then((res) => {
+      //     console.log(res);
+      //     const { token, user } = res;
+      //     this.$store.dispatch('setToken', token);
+      //     this.$store.dispatch('setUser', user);
+      //     if (user === undefined || token === undefined) {
+      //       localStorage.clear();
+      //     } else {
+      //       document.location.href = 'http://localhost:8080/';
+      //     }
+      //   });
     },
   },
 };

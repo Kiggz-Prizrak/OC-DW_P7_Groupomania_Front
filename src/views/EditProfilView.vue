@@ -170,53 +170,6 @@ export default {
       }
       return this.upadateProfilKeepAvatar();
     },
-
-    // edit() {
-    //   console.log(this.$refs.inputFile.files[0]);
-    //   if (this.$refs.inputFile.files[0]) {
-    //     if (this.email === this.emailConfirmation
-    //     && this.password === this.passwordConfirmation) {
-    //       const userEdited = new FormData();
-    //       userEdited.append('avatar', this.$refs.inputFile.files[0] ?? this.$store.user.avatar);
-    //       userEdited.append('firstName', this.firstName);
-    //       userEdited.append('lastName', this.lastName);
-    //       userEdited.append('username', this.username);
-    //       userEdited.append('password', this.password);
-    //       userEdited.append('email', this.email);
-
-    //       fetch(`http://localhost:3000/api/users/${this.UserId}`, {
-    //         body: userEdited,
-    //         method: 'PUT',
-    //         headers: {
-    //           Authorization: `Bearer ${this.$store.state.token}`,
-    //         },
-    //       })
-    //         .then((res) => res.json())
-    //         .then(() => this.$router.push({ name: 'profil' }));
-    //     }
-    //   }
-    //   if (this.email === this.emailConfirmation && this.password === this.passwordConfirmation) {
-    //     const userEdited = JSON.stringify({
-    //       avatar: this.$store.user.avatar,
-    //       firstName: this.firstName,
-    //       lastName: this.lastName,
-    //       username: this.username,
-    //       password: this.password,
-    //       email: this.email,
-    //     });
-
-    //     fetch(`http://localhost:3000/api/users/${this.UserId}`, {
-    //       body: userEdited,
-    //       method: 'PUT',
-    //       headers: {
-    //         Authorization: `Bearer ${this.$store.state.token}`,
-    //         'Content-Type': 'application/json',
-    //       },
-    //     })
-    //       .then((res) => res.json())
-    //       .then(() => this.$router.push({ name: 'profil' }));
-    //   }
-    // },
   },
 };
 </script>
